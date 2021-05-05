@@ -73,7 +73,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
      */
     private void percolateUp(int index) {
         E x = this.array.get(index);
-
+        // x.compareTo(y) return 0 si x==y, int<0 si x<y et int>0 si x>y
         for (; index > 0
                 && x.compareTo(this.array.get(indexParent(index))) < 0; index = indexParent(
                         index)) {
@@ -137,7 +137,24 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 
     @Override
     public void remove(E x) throws ElementNotFoundException {
-        // TODO:
+    	int k = this.array.indexOf(x); //k est l'indice du premier élément qui vaut x
+        
+    	if (this.isEmpty() || k < 0 || k >= this.currentSize) //si le tas est vide ou que la valeur de k n'est pas compatible
+            throw new ElementNotFoundException(x); //alors il y a une erreur
+        
+    	//k est donc compatible donc on modifie notre tas en conséquence
+    	if (k == this.currentSize-1) { //si je souhaite supprimer le dernier élément
+    		this.currentSize--; //je réduis ma taille, la valeur sera alors tout simplement oubliée
+    	} else {
+	        E last = this.array.get(--this.currentSize); //la taille du tas est réduite
+	        this.arraySet(k, last); //on place la dernière valeur à la place de celle qu'on souhaite supprimer
+	        
+	        //on place correctement cette valeur pour que notre tas reste à valeur croissante
+	        this.percolateUp(k); //soit il faudra la remonter dans l'arbre
+	        this.percolateDown(k); // soit la descendre
+	        //pas besoin de savoir quelle percolate choisir, les fonctions sont écrites avec tout les if nécessaires
+    	}
+        
     }
 
     @Override

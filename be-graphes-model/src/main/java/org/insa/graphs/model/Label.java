@@ -16,7 +16,7 @@ public class Label implements Comparable <Label> {
 	    public Label (Node som) {
 	    	this.sommet = som ;
 	    	this.marque = false ;
-	    	this.cout = (float)(1.0/0.0) ;
+	    	this.cout = (float)(1.0/0.0) ; //+inf
 	    	this.pere = null ;
 	    	this.dansTas = false ;
 	    }

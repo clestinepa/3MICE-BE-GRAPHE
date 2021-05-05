@@ -26,11 +26,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         BinaryHeap<Label> tas = new BinaryHeap<Label>();
         
         for (Node node : g.getNodes()) {
-        	labels.add(node.getId(),new Label(node));//tous les noeuds enregistrÃ©s dans un tableau de Label, facilement accessible par leur id !
+        	labels.add(node.getId(),new Label(node));//tous les noeuds enregistrés dans un tableau de Label, facilement accessible par leur id !
         }
         
         Label Origin = labels.get(data.getOrigin().getId()) ; //on enregistre le Label de l'origin
-        Origin.setCost(0); //Met le cout du dÃ©part Ã  0
+        Origin.setCost(0); //Met le cout du départ à 0
     	tas.insert(Origin); //l'ajoute dans le tas
     	Origin.setDansTas(true); //on previens le Label que le noeud est dans le tas
         
@@ -40,8 +40,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	while (!tas.isEmpty()) {
     		
     		x = tas.deleteMin(); //on supprime le noeud avec le cout le plus faible
-    		x.setMarque(true); //on le dit marquÃ©
-    		x.setDansTas(false); //on prÃ©sice qu'il ne fait plus parti du tas
+    		x.setMarque(true); //on le dit marqué
+    		x.setDansTas(false); //on présice qu'il ne fait plus parti du tas
+    		notifyNodeMarked(x.getSommet());
     		
     		if (x.getSommet() == Objectif.getSommet()) { //si on a fini avec le noeud objectif, on sort de la boucle
     			break ;
@@ -49,18 +50,19 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     		for (Arc successeur : x.getSommet().getSuccessors()) { //on parcours tous les chemins possibles partant de ce noeud
     			y = labels.get(successeur.getDestination().getId()); //on enregistre le label de ce successeur
-    			
-    			if (!y.getMarque()) { //on ne considÃ¨re que les successeurs non marquÃ©s
+        		notifyNodeReached(y.getSommet());
+
+    			if (!y.getMarque()) { //on ne considère que les successeurs non marqués
     				
     				if ( y.getCost() > x.getCost() + (double)successeur.getLength() ) { //si le cout actuel est plus grand que le nouveau cout
-    					y.setCost(x.getCost() + (double)successeur.getLength()); //alors on met Ã  jour le cout
-    					y.setPere(successeur); //et on met Ã  jour le pere aussi
-    					if (y.getDansTas()) { //si y est dÃ©jÃ  dans le tas
-    						tas.remove(y); //on l'enlÃ¨ve du tas
-    						tas.insert(y); //on le remet => il est Ã  la bonne place
+    					y.setCost(x.getCost() + (double)successeur.getLength()); //alors on met à jour le cout
+    					y.setPere(successeur); //et on met à jour le père aussi
+    					if (y.getDansTas()) { //si y est déjà  dans le tas
+    						tas.remove(y); //on l'enlève du tas
+    						tas.insert(y); //on le remet => il est à la bonne place
     					} else { //sinon
-    						tas.insert(y); //on l'ajoute Ã  la bonne place
-    						y.setDansTas(true); //on indique au label qu'il a Ã©tait mis dans le tas
+    						tas.insert(y); //on l'ajoute à la bonne place
+    						y.setDansTas(true); //on indique au label qu'il a été mis dans le tas
     					}
     					
     				}
@@ -73,10 +75,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	
     	List<Arc> arcs = new ArrayList<Arc>();
     	
-    	Label k = Objectif; //j'initialise k Ã  Objectif
+    	Label k = Objectif; //j'initialise k à Objectif
         while (k.getSommet() != Origin.getSommet()) { //je sors de la boucle quand j'atteins mon noeud d'origine
         	arcs.add(k.getPere());
-        	k = labels.get(k.getPere().getOrigin().getId()) ; //je remonte de label en label en suivant le chemin que j'ai calculÃ©
+        	k = labels.get(k.getPere().getOrigin().getId()) ; //je remonte de label en label en suivant le chemin que j'ai calculé
         }
         Collections.reverse(arcs);
         solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(g, arcs));
