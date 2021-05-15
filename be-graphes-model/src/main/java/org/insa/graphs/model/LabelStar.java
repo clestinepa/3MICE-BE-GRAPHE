@@ -19,7 +19,7 @@ public class LabelStar extends Label implements Comparable <Label> {
 	}
 	
 	
-	/*Permet de modifier le CompareTo indirectement*/
+	/*Permet de modifier le CompareTo indirectement et ainsi le tri des sommets dans les tas binaires*/
 	public double getTotalCost() {
     	return this.getCost() + this.getCostEstime() ;
     }

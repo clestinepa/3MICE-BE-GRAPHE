@@ -11,7 +11,7 @@ public class Label implements Comparable <Label> {
 	    
 	    private Arc pere ;
 	    
-	    private boolean dansTas ;
+	    private boolean dansTas ; //permet de savoir si le sommet est dans le tas
 	    
 	    public Label (Node som) {
 	    	this.sommet = som ;
@@ -63,7 +63,7 @@ public class Label implements Comparable <Label> {
 	    	this.dansTas = i ;
 	    }
 	    
-	    /*Juste pour être redefinie par les héritiers*/
+	    /*Juste pour être redéfinie par les héritiers (i.e LabelStar)*/
 	    public double getTotalCost() {
 	    	return this.cout ;
 	    }

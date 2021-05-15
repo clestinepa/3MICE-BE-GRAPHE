@@ -38,8 +38,8 @@ public class Path {
         	return new Path(graph, nodes.get(0));
         }
         List<Arc> arcs = new ArrayList<Arc>();
-        for (int k = 0 ; k < (nodes.size()-1) ; k++) { //-1 car on a fini Ã  l'avant dernier
-        	if (nodes.get(k).getNumberOfSuccessors() == 0) { //idem Ã  !nodes.get(k).hasSuccessors()
+        for (int k = 0 ; k < (nodes.size()-1) ; k++) { //-1 car on a fini à l'avant dernier
+        	if (nodes.get(k).getNumberOfSuccessors() == 0) { //idem à !nodes.get(k).hasSuccessors()
         		throw new IllegalArgumentException("Pas de successeurs !");
         	} else {
         		Arc minChemin = null;
@@ -84,8 +84,8 @@ public class Path {
         	return new Path(graph, nodes.get(0));
         }
         List<Arc> arcs = new ArrayList<Arc>();
-        for (int k = 0 ; k < (nodes.size()-1) ; k++) { //-1 car on a fini Ã  l'avant dernier
-        	if (nodes.get(k).getNumberOfSuccessors() == 0) { //idem Ã  !nodes.get(k).hasSuccessors()
+        for (int k = 0 ; k < (nodes.size()-1) ; k++) { //-1 car on a fini à l'avant dernier
+        	if (nodes.get(k).getNumberOfSuccessors() == 0) { //idem à !nodes.get(k).hasSuccessors()
         		throw new IllegalArgumentException("Pas de successeurs !");
         	} else {
         		Arc minChemin = null;
@@ -273,8 +273,6 @@ public class Path {
      * 
      */
     public float getLength() {
-        // on parcourt la liste des arcs et on somme la langueur des arcs
-    	// pour avoir cette longueur, on utilise le getLength dans l'instance Arc :
     	float DistanceTotale = 0 ;
     	for (Arc distance : this.arcs) {
     		DistanceTotale = DistanceTotale + distance.getLength() ;
@@ -291,7 +289,6 @@ public class Path {
      *         kilometers-per-hour).
      */
     public double getTravelTime(double speed) {
-        // Idem que getLength :
     	double TotalTime = 0 ;
     	for (Arc time : this.arcs) {
     		TotalTime = TotalTime + time.getTravelTime(speed) ;
@@ -306,7 +303,6 @@ public class Path {
      * @return Minimum travel time to travel this path (in seconds).
      */
     public double getMinimumTravelTime() {
-        // IDEEEEM (juste la speed dÃ©pend de la route mtn:
     	double MinTime = 0 ;
     	for (Arc time : this.arcs) {
     		MinTime = MinTime + time.getMinimumTravelTime() ;

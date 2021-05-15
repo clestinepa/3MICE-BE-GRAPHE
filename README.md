@@ -1,62 +1,60 @@
-# Graph & Algorithm project &mdash; INSA Toulouse
+Une fois le projet importé dans Eclipse, il crée un nouveau package be-graphes-all
+/!\ Eclipse est un handicapé : NE PAS OUVRIR les fichiers depuis be-graphes-all !! Bien que ce sont les mêmes car seulement des raccourcis, Eclipse n'arrive pas à les compiler.
 
-## How to start?
 
-You will not be able to use this repository to save your work, you need to copy / import / fork it to 
-your favorite Git platform.
+Etape 2 :
+-Diagramme UML très synthétique des classes Graph, Node, Path, Arcs, et RoadInformation (uniquement avec les attributs importants).
+-Représentation choisie pour le graphe ?
+-Création d'un programme from scratch
 
-### Importing to [Github](https://github.com), [Bitbucket](https://bitbucket.org) or [Gitlab](https://gitlab.com):
+Etape 3 :
+-Lors de l'agorithme de Dijkstra, l'étape de sélection d'un sommet de cout minimal doit se baser sur un tas. Savez-vous pourquoi ?
+-Que contient le tas juste après l'étape d'initialisation de l'algorithme ? => Il ne contient que l'origine qu'on a choisie
+-Quelle est la complexité théorique de l'algorithme de Dijkstra sans tas et avec tas ?
 
-You first need to register and then log in to the platform you want. The steps to import the project are detailed below:
+-Concernant les tests JUnit du tas : le programmeur expérimenté qui a écrit les tests JUnit du tas avait-il besoin de la classe BinaryHeap pour écrire les tests ?
+-Cette question soulève un principe de conception important, cela vaut la peine d'y réfléchir 5 minutes... puis de chercher Test Driven Development sur le internet.
+-Si vous ajoutez des méthodes publiques au tas, ajoutez-les aussi à l'interface PriorityQueue.
 
-#### Github
+-Diagramme de classes UML avec les classes du package algo et algo.shortestpath.
 
-1. In the upper-right corner of any page, click the **"+"** icon, then click **Import repository**, or go to [https://github.com/new/import](https://github.com/new/import). 
-2. Paste the following URL in the first input:
-     [https://gitea.typename.fr/INSA/be-graphes.git](https://gitea.typename.fr/INSA/be-graphes.git)
-3. Choose the name you want for the repository.
-4. Click *Begin import*.
-5. Wait for completion... Done!
+-Quelle est la complexité de l'opération add sur le tas ? et de remove ?
+-Et donc, quelle est la complexité théorique de votre Dijkstra ?
+-Cela devrait vous sembler bizarre. La prochaine partie vous aidera à appréhender ce point.
 
-#### Bitbucket
 
-1. On the left panel of any page, click the **"+"** icon, then **Repository**, and then **Import**, or directly go to [https://bitbucket.org/repo/import](https://bitbucket.org/repo/import). 
-2. Paste the following URL in the first input (select Git as source if not already selected):
-     [https://gitea.typename.fr/INSA/be-graphes.git](https://gitea.typename.fr/INSA/be-graphes.git)
-3. Choose the name you want for repository, and select Git as the *Version control system*.
-4. Click *Import repository*.
-5. Wait for completion... Done!
 
-#### Gitlab
+PRINCIPES DES ALGOS dans Path.java :
 
-1. In the upper-right corner of any page, click the **"+"** icon, then **New project**, or directly go to [https://gitlab.com/projects/new](https://gitlab.com/projects/new).
-2. Select the **Import project** tab, and then click **Repo by URL** (right-most option).
-3. Paste the following URL in the first input:
-     [https://gitea.typename.fr/INSA/be-graphes.git](https://gitea.typename.fr/INSA/be-graphes.git)
-4. Choose the name you want for the repository.
-5. Click *Create project*.
-6. Wait for completion... Done!
+getLenght() : on parcourt la liste des arcs du chemin et on somme la longueur de chaque arc (obtenu avec arc.getLenght() )
+getTravelTime() : idem avec le temps mis pour chaque arc selon une vitesse speed donnée (obtenu avec arc.getTravelTime(speed) )
+getMinimumTravelTime() : idem avec le temps minimum pour parcourir chaque arc (obtenu avec arc.getMinimumTravelTime() )
 
-### Importing to another repository provider *[not recommended]*:
+isValid() : vide => OK
+            composé d'un seul sommet => OK
+            la destination d'un arc n'est pas l'origine du prochain => NO
+            le premier arc ne commence pas à l'origine => NO
 
-1. Create a new **empty** repository (no README, no LICENSE) on your provider. Let's assume the URL of your repository is `$URL_REPOSITORY`.
-2. Clone this repository somewhere:
+createShortestPathFromNodes() : 0 sommet => path(graph)
+                                1 sommet => path(graph, le sommet)
+				plusieurs sommets => pour chaque sommet => sans successeur => erreur
+                                                                        => avec successeurs (arcs sortants) => pour chaque arc => des arcs mènent au sommet voulu => le plus petit arc est enregistré dans listearcs
+                                                                                                                               => aucun arc mène au sommet voulu => erreur
+                                                  => path(graph, listearcs)
+createFastestPathFromNodes() : idem mais c'est l'arc le plus rapide qui est enregistré
 
-    ```bash
-	git clone https://gitea.typename.fr/INSA/be-graphes.git
-	```
-    
-3. Go inside the newly cloned repository and update the **remote**:
-   
-    ```bash
-	cd be-graphes
-	git remote set-url origin $URL_REPOSITORY
-	```
-    
-4. Push to your repository:
 
-    ```bash
-	push -u origin master
-	```
-	
-Another way is to do a bare clone and then mirror it to your repository: [https://help.github.com/articles/importing-a-git-repository-using-the-command-line/](https://help.github.com/articles/importing-a-git-repository-using-the-command-line/)
+REMARQUES dans DijkstraAlgorithm.java :
+
+Mon programme peut rencontrer deux cas particuliers lors de la contrainte "only cars" :
+-l'origine se situe à un endroit non accessible par voitures => mon algo s'arrête assez tôt et indique un chemin impossible
+-l'objectif n'est pas accessible en voiture => mon algo parcous TOUS les chemins de la carte avant d'en conclure qu'aucun chemin n'est possible
+ Pour éviter une telle recherche inutile, on pourrait faire une vérification en amont des arcs menant à l'objectif => s'il n'est pas accessible, on stop l'algorithme avant !
+ (dans notre contexte, ce cas est trop rare pour qu'on s'en préoccupe)
+
+
+REMARQUE dans BinaryHeap.java :
+
+remove() remplace l'élément que l'on souhaite enlever par le dernier élément, on réduit la taille du tas puis on place correctement le dernier élément dans le tas (avec percolateUp() et percolateDown()) => avec ce raisenement, les tests JUnits fonctionnent.
+Mais /!\ que faisons nous si l'élément que l'on souhaite enlever EST le dernier élément ? => On réduit simplement la taille du tas !
+Sans cette vérification, on remplace un élément par lui même (pas de pb, ça sert juste à rien), on réduit la taille du tas (parfait, c'est ce qu'on voulait), et on utilise percolateUp() et percolateDown() sur un élément qui ne fait plus parti du tas ! => le prgm plante
