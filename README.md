@@ -71,7 +71,10 @@ Sans cette vérification, on remplace un élément par lui même (pas de pb, ça
 #### REMARQUE dans DijkstraAlgorithm.java :
 
 Mon programme peut rencontrer deux cas particuliers lors de la contrainte "only cars" :
+
 -l'origine se situe à un endroit non accessible par voitures => mon algo s'arrête assez tôt et indique un chemin impossible
+
 -l'objectif n'est pas accessible en voiture => mon algo parcous TOUS les chemins de la carte avant d'en conclure qu'aucun chemin n'est possible
+
  Pour éviter une telle recherche inutile, on pourrait faire une vérification en amont des arcs menant à l'objectif => s'il n'est pas accessible, on stop l'algorithme avant !
  (dans notre contexte, ce cas est trop rare pour qu'on s'en préoccupe)
