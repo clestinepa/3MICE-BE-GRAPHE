@@ -136,7 +136,7 @@ public class ArcInspectorFactory {
             }
         });
 
-        // Non-private roads for pedestrian and bicycle:
+        // Non-private roads for pedestrian :
         filters.add(new ArcInspector() {
 
             @Override
@@ -166,12 +166,81 @@ public class ArcInspectorFactory {
             public Mode getMode() {
                 return Mode.TIME;
             }
-        });
 
+        });
+       
+        
         // Add your own filters here (do not forget to implement toString()
         // to get an understandable output!):
+        
+        //Pour des cyclistes qui cherchent de la sécurité
+        filters.add(new ArcInspector() {
 
+            @Override
+            public boolean isAllowed(Arc arc) {
+                return arc.getRoadInformation().getAccessRestrictions()
+                        .isAllowedForAny(AccessMode.BICYCLE, EnumSet.complementOf(EnumSet
+                                .of(AccessRestriction.FORBIDDEN, AccessRestriction.PRIVATE)));
+            }
+
+            @Override
+            public double getCost(Arc arc) {
+            	double cout =  arc.getTravelTime(Math.min(getMaximumSpeed(), arc.getRoadInformation().getMaximumSpeed()));
+            	
+            	if (arc.getRoadInformation().getAccessRestrictions().isAllowedForAny(AccessMode.MOTORCAR, EnumSet.complementOf(EnumSet.of(AccessRestriction.FORBIDDEN, AccessRestriction.PRIVATE)))) {
+                  	switch(arc.getRoadInformation().getType()) {
+            			case TRUNK : //route nationnale
+            				cout = cout*80.0; 
+            				break;
+            			case PRIMARY :
+            				break;
+            			default :
+            		}
+            	}
+            	
+               /*,
+                ,
+                SECONDARY,
+                MOTORWAY_LINK,
+                TRUNK_LINK,
+                PRIMARY_LINK,
+                SECONDARY_LINK,
+                TERTIARY,
+                TRACK,
+                RESIDENTIAL,
+                UNCLASSIFIED,
+                LIVING_STREET,
+                SERVICE,
+                ROUNDABOUT,
+                PEDESTRIAN,
+                CYCLEWAY,
+                COASTLINE*/
+                
+            	
+            	
+                return cout ;
+            }
+
+            @Override
+            public String toString() {
+                return "Shortest path for careful cyclist";
+            }
+
+            @Override
+            public int getMaximumSpeed() {
+                return 19; //d'après google
+            }
+
+            @Override
+            public Mode getMode() {
+                return Mode.LENGTH;
+            }
+
+        });
+
+        
         return filters;
+
     }
 
 }

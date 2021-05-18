@@ -39,5 +39,8 @@ public interface ArcInspector {
      * @return Mode for this arc inspector.
      */
     public Mode getMode();
+    
+    
+   
 
 }
