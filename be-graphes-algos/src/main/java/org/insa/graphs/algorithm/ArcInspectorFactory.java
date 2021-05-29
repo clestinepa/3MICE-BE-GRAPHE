@@ -185,21 +185,24 @@ public class ArcInspectorFactory {
 
             @Override
             public double getCost(Arc arc) {
-            	double cout =  arc.getTravelTime(Math.min(getMaximumSpeed(), arc.getRoadInformation().getMaximumSpeed()));
-            	
+            	double cout =  arc.getLength();
+            	double m = 1 ;
             	if (arc.getRoadInformation().getAccessRestrictions().isAllowedForAny(AccessMode.MOTORCAR, EnumSet.complementOf(EnumSet.of(AccessRestriction.FORBIDDEN, AccessRestriction.PRIVATE)))) {
-                  	switch(arc.getRoadInformation().getType()) {
-            			case TRUNK : //route nationnale
+                  /*	switch(arc.getRoadInformation().getType()) {
+                  		case MOTORWAY : //autoroute
+                  			cout = 1.0/0.0 ; //+inf, pas de vélo sur l'autoroute voyons !!
+                  			break;
+                  		case TRUNK : //route nationnale
             				cout = cout*80.0; 
             				break;
             			case PRIMARY :
             				break;
             			default :
-            		}
+            		} */
+            		m = arc.getRoadInformation().getMaximumSpeed() ;
             	}
             	
-               /*,
-                ,
+               /*
                 SECONDARY,
                 MOTORWAY_LINK,
                 TRUNK_LINK,
@@ -218,7 +221,7 @@ public class ArcInspectorFactory {
                 
             	
             	
-                return cout ;
+                return cout * m ;
             }
 
             @Override
